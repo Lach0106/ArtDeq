@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ArtDeq.Models"
+             xmlns:vm="clr-namespace:ArtDeq.ViewModels"
+             x:Class="ArtDeq.Views.CollectionPage"
+             x:DataType="vm:CollectionViewModel"
+             Title="Saved Artworks">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0"
+              Padding="8,50,16,10"
+              BackgroundColor="White"
+              ColumnDefinitions="Auto,*">
+            <Border Grid.Column="0"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    BackgroundColor="Transparent"
+                    Stroke="Transparent"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}" />
+                </Border.GestureRecognizers>
+                <Path Data="M15,4 L7,12 L15,20"
+                      Stroke="{StaticResource Gray600}"
+                      StrokeThickness="2"
+                      StrokeLineCap="Round"
+                      StrokeLineJoin="Round"
+                      Fill="Transparent"
+                      WidthRequest="18"
+                      HeightRequest="24"
+                      Aspect="Uniform"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center" />
+            </Border>
+            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1" Margin="8,0,0,0">
+                <Label Text="Saved Artworks"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="18"
+                       TextColor="{StaticResource TextDark}" />
+                <Label Text="Artworks you saved privately for later."
+                       FontSize="11"
+                       TextColor="{StaticResource Gray500}" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- CONTENT -->
+        <Grid Grid.Row="1" BackgroundColor="{StaticResource Cream}">
+
+            <!-- Empty state -->
+            <VerticalStackLayout IsVisible="{Binding IsEmpty}"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="8"
+                                 Padding="40,0">
+                <Label Text="No saved artworks yet"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="16"
+                       TextColor="{StaticResource Gray400}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Save artworks from the feed to find them here."
+                       FontSize="13"
+                       TextColor="{StaticResource Gray400}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Saved list -->
+            <CollectionView IsVisible="{Binding HasSavedArtworks}"
+                            ItemsSource="{Binding SavedArtworks}"
+                            Margin="12,10">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="2"
+                                     VerticalItemSpacing="14"
+                                     HorizontalItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Artwork">
+                        <VerticalStackLayout Spacing="7">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnArtworkTapped" CommandParameter="{Binding .}" />
+                            </VerticalStackLayout.GestureRecognizers>
+
+                            <Border StrokeShape="RoundRectangle 14"
+                                    Stroke="Transparent"
+                                    HeightRequest="150">
+                                <Image Source="{Binding ImageUrl}"
+                                       Aspect="AspectFill" />
+                            </Border>
+
+                            <Grid ColumnDefinitions="Auto,*" Padding="2,0">
+                                <Border Grid.Column="0"
+                                        WidthRequest="20" HeightRequest="20"
+                                        StrokeShape="RoundRectangle 10"
+                                        Stroke="Transparent"
+                                        BackgroundColor="{StaticResource Gray100}"
+                                        VerticalOptions="Center">
+                                    <Image Source="{Binding Artist.AvatarUrl}"
+                                           Aspect="AspectFill" />
+                                </Border>
+                                <Label Grid.Column="1"
+                                       Text="{Binding Artist.Handle}"
+                                       FontSize="11"
+                                       TextColor="{StaticResource Gray500}"
+                                       VerticalOptions="Center"
+                                       Margin="6,0,0,0"
+                                       LineBreakMode="TailTruncation" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+    </Grid>
+</ContentPage>

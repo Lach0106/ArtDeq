@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ArtDeq.Views.CreateAccountPage"
+             BackgroundColor="{StaticResource Cream}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Button Grid.Row="0"
+                Text="‹"
+                Clicked="OnBackClicked"
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource Gray600}"
+                FontSize="28"
+                HorizontalOptions="Start"
+                Padding="16,12" />
+
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="16"
+                             Padding="32"
+                             VerticalOptions="Center">
+
+            <Label Text="Create Account"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="24"
+                   TextColor="{StaticResource OrangeAccent}"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,8" />
+
+            <Label Text="Display Name"
+                   FontSize="13"
+                   TextColor="{StaticResource Gray600}" />
+
+            <Entry x:Name="DisplayNameEntry"
+                   Placeholder="Your full name"
+                   FontSize="15"
+                   BackgroundColor="White"
+                   TextColor="{StaticResource Gray600}"
+                   PlaceholderColor="{StaticResource Gray400}" />
+
+            <Label Text="Username"
+                   FontSize="13"
+                   TextColor="{StaticResource Gray600}" />
+
+            <Entry x:Name="UsernameEntry"
+                   Placeholder="@username"
+                   FontSize="15"
+                   BackgroundColor="White"
+                   TextColor="{StaticResource Gray600}"
+                   PlaceholderColor="{StaticResource Gray400}" />
+
+            <Label Text="Role"
+                   FontSize="13"
+                   TextColor="{StaticResource Gray600}" />
+
+            <Picker x:Name="RolePicker"
+                    Title="Select a role"
+                    FontSize="15"
+                    BackgroundColor="White"
+                    TextColor="{StaticResource Gray600}"
+                    TitleColor="{StaticResource Gray400}">
+                <Picker.Items>
+                    <x:String>Creator</x:String>
+                    <x:String>Collector</x:String>
+                    <x:String>Both</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Button Text="Create Account"
+                    Clicked="OnCreateAccountClicked"
+                    BackgroundColor="{StaticResource OrangeAccent}"
+                    TextColor="White"
+                    FontFamily="OpenSansSemibold"
+                    FontSize="16"
+                    CornerRadius="14"
+                    HeightRequest="52"
+                    Margin="0,12,0,0" />
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

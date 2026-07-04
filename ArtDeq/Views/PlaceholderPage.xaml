@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ArtDeq.Views.PlaceholderPage"
+             BackgroundColor="{StaticResource Cream}">
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" Padding="8,50,16,4" BackgroundColor="Transparent">
+            <Border WidthRequest="48"
+                    HeightRequest="48"
+                    BackgroundColor="Transparent"
+                    Stroke="Transparent"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackClicked" />
+                </Border.GestureRecognizers>
+                <Path Data="M15,4 L7,12 L15,20"
+                      Stroke="{StaticResource Gray600}"
+                      StrokeThickness="2"
+                      StrokeLineCap="Round"
+                      StrokeLineJoin="Round"
+                      Fill="Transparent"
+                      WidthRequest="18"
+                      HeightRequest="24"
+                      Aspect="Uniform"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center" />
+            </Border>
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+            <Label x:Name="HeadingLabel"
+                   Text="Coming Soon"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="18"
+                   TextColor="{StaticResource Gray300}"
+                   HorizontalOptions="Center" />
+            <Label x:Name="MessageLabel"
+                   Text="This screen is not yet implemented"
+                   FontSize="13"
+                   TextColor="{StaticResource Gray400}"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

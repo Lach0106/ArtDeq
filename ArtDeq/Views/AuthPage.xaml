@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ArtDeq.Views.AuthPage"
+             BackgroundColor="{StaticResource Cream}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Button Grid.Row="0"
+                Text="‹"
+                Clicked="OnBackClicked"
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource Gray600}"
+                FontSize="28"
+                HorizontalOptions="Start"
+                Padding="16,12" />
+
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="20"
+                             Padding="32"
+                             VerticalOptions="Center">
+
+            <Label Text="ArtDeq"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="28"
+                   TextColor="{StaticResource OrangeAccent}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Join ArtDeq and start building your own collection."
+                   FontSize="15"
+                   TextColor="{StaticResource Gray600}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,12" />
+
+            <Button Text="Sign In"
+                    Clicked="OnSignInClicked"
+                    BackgroundColor="{StaticResource OrangeAccent}"
+                    TextColor="White"
+                    FontFamily="OpenSansSemibold"
+                    FontSize="16"
+                    CornerRadius="14"
+                    HeightRequest="52" />
+
+            <Button Text="Create Account"
+                    Clicked="OnCreateAccountClicked"
+                    BackgroundColor="White"
+                    TextColor="{StaticResource OrangeAccent}"
+                    FontFamily="OpenSansSemibold"
+                    FontSize="16"
+                    CornerRadius="14"
+                    HeightRequest="52"
+                    BorderColor="{StaticResource OrangeAccent}"
+                    BorderWidth="1" />
+
+            <Button Text="‹ Keep Exploring"
+                    Clicked="OnContinueBrowsingClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Gray500}"
+                    FontSize="14"
+                    HeightRequest="44" />
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

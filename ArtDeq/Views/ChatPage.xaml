@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ArtDeq.ViewModels"
+             xmlns:models="clr-namespace:ArtDeq.Models"
+             x:Class="ArtDeq.Views.ChatPage"
+             x:DataType="vm:ChatViewModel"
+             BackgroundColor="{StaticResource Cream}">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0"
+              Padding="8,50,16,10"
+              BackgroundColor="White"
+              ColumnDefinitions="Auto,Auto,*">
+
+            <Button Grid.Column="0"
+                    Text="←"
+                    FontSize="18"
+                    Command="{Binding BackCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource TextDark}"
+                    BorderWidth="0"
+                    WidthRequest="44"
+                    HeightRequest="44"
+                    HorizontalOptions="Start" />
+
+            <Border Grid.Column="1"
+                    WidthRequest="36" HeightRequest="36"
+                    StrokeShape="RoundRectangle 18"
+                    Stroke="{StaticResource OrangeAccent}"
+                    StrokeThickness="1.5"
+                    VerticalOptions="Center"
+                    Margin="4,0,10,0">
+                <Image Source="{Binding Artwork.Artist.AvatarUrl}"
+                       Aspect="AspectFill" />
+            </Border>
+
+            <VerticalStackLayout Grid.Column="2"
+                                 VerticalOptions="Center"
+                                 Spacing="2">
+                <Label Text="{Binding Artwork.Artist.DisplayName}"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="14"
+                       TextColor="{StaticResource TextDark}" />
+                <Label Text="{Binding Artwork.Artist.Handle}"
+                       FontSize="11"
+                       TextColor="{StaticResource Gray500}" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+        <!-- ARTWORK SUMMARY CARD -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 14"
+                Stroke="{StaticResource Gray100}"
+                StrokeThickness="1"
+                Margin="16,10,16,4"
+                Padding="10">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+
+                <Grid Grid.Column="0" ColumnDefinitions="Auto,*">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenArtworkCommand}" />
+                    </Grid.GestureRecognizers>
+                    <Border Grid.Column="0"
+                            WidthRequest="54" HeightRequest="54"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="Transparent">
+                        <Image Source="{Binding Artwork.ImageUrl}"
+                               Aspect="AspectFill" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1"
+                                         Margin="12,0,0,0"
+                                         VerticalOptions="Center"
+                                         Spacing="3">
+                        <Label Text="{Binding Artwork.Title}"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="13"
+                               TextColor="{StaticResource TextDark}" />
+                        <Label Text="{Binding Artwork.Price}"
+                               FontSize="12"
+                               TextColor="{StaticResource OrangeAccent}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Border Grid.Column="1"
+                        WidthRequest="54" HeightRequest="54"
+                        BackgroundColor="{StaticResource Secondary}"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="{StaticResource OrangeAccent}"
+                        StrokeThickness="1.5"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BuyCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Path Data="M2,12 L9,4 H21 V20 H9 Z M9.4,8 A1.4,1.4 0 1,1 6.6,8 A1.4,1.4 0 1,1 9.4,8 Z"
+                              Stroke="{StaticResource OrangeAccent}"
+                              StrokeThickness="1.6"
+                              Fill="Transparent"
+                              WidthRequest="16" HeightRequest="16"
+                              Aspect="Uniform" HorizontalOptions="Center" />
+                        <Label Text="Buy" FontSize="12"
+                               FontFamily="OpenSansSemibold"
+                               TextColor="{StaticResource OrangeAccent}"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <!-- MESSAGES -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Messages}"
+                        Margin="0,4,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ChatMessage">
+                    <Grid ColumnDefinitions="Auto,*"
+                          HorizontalOptions="Fill">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Padding="16,5" Spacing="3"
+                                             HorizontalOptions="Start"
+                                             MaximumWidthRequest="300">
+                            <VerticalStackLayout.Triggers>
+                                <DataTrigger TargetType="VerticalStackLayout"
+                                             Binding="{Binding IsFromMe}"
+                                             Value="True">
+                                    <Setter Property="Grid.Column" Value="1" />
+                                    <Setter Property="HorizontalOptions" Value="End" />
+                                </DataTrigger>
+                            </VerticalStackLayout.Triggers>
+                            <Label Text="{Binding SenderHandle}"
+                                   FontSize="10"
+                                   FontFamily="OpenSansSemibold"
+                                   TextColor="{StaticResource OrangeAccent}" />
+                            <Border BackgroundColor="White"
+                                    StrokeShape="RoundRectangle 12"
+                                    Stroke="{StaticResource Gray100}"
+                                    StrokeThickness="1"
+                                    Padding="12,8">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border"
+                                                 Binding="{Binding IsFromMe}"
+                                                 Value="True">
+                                        <Setter Property="BackgroundColor" Value="#F9DFA8" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+
+                                <Label Text="{Binding Text}"
+                                       FontSize="13"
+                                       TextColor="{StaticResource TextDark}"
+                                       LineBreakMode="WordWrap" />
+                            </Border>
+                            <Label Text="{Binding Timestamp, StringFormat='{0:h:mm tt}'}"
+                                   FontSize="10"
+                                   TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- COMPOSER -->
+        <Border Grid.Row="3"
+                BackgroundColor="White"
+                Stroke="{StaticResource Gray100}"
+                StrokeThickness="1"
+                Padding="12,8">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Grid.Column="0"
+                        BackgroundColor="{StaticResource Cream}"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="{StaticResource Gray100}"
+                        StrokeThickness="1"
+                        Padding="12,0">
+                    <Entry Placeholder="Type a message…"
+                           Text="{Binding MessageText}"
+                           FontSize="14"
+                           TextColor="{StaticResource TextDark}"
+                           PlaceholderColor="{StaticResource Gray500}"
+                           VerticalOptions="Center" />
+                </Border>
+                <Button Grid.Column="1"
+                        Text="Send"
+                        Command="{Binding SendCommand}"
+                        BackgroundColor="{StaticResource OrangeAccent}"
+                        TextColor="White"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="13"
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        WidthRequest="68" />
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ArtDeq.ViewModels"
+             x:Class="ArtDeq.Views.ArtworkDetailPage"
+             x:DataType="vm:ArtworkDetailViewModel"
+             BackgroundColor="{StaticResource Cream}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- BACK BUTTON -->
+        <Grid Grid.Row="0" Padding="8,50,16,4" BackgroundColor="Transparent">
+            <Button HorizontalOptions="Start"
+                    Text="←"
+                    FontSize="18"
+                    Command="{Binding BackCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource TextDark}"
+                    BorderWidth="0"
+                    WidthRequest="52"
+                    HeightRequest="44" />
+        </Grid>
+
+        <!-- SCROLL -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,0,20,40" Spacing="22">
+
+                <!-- COLLECTIBLE CARD — FRONT FACE -->
+                <Grid IsVisible="{Binding IsShowingFront}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding FlipCommand}" />
+                    </Grid.GestureRecognizers>
+
+                    <!-- Orange card back layer (showing from behind) -->
+                    <Border BackgroundColor="{StaticResource OrangeAccent}"
+                            StrokeShape="RoundRectangle 20"
+                            Stroke="Transparent"
+                            Margin="8,10,0,0"
+                            VerticalOptions="Fill">
+                        <BoxView Color="Transparent" />
+                    </Border>
+
+                    <!-- Front white card: Image + Info -->
+                    <Border BackgroundColor="White"
+                            StrokeShape="RoundRectangle 20"
+                            Stroke="{StaticResource Gray100}"
+                            StrokeThickness="1"
+                            Margin="0,0,8,10">
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.14" Radius="26" Offset="0,6" />
+                        </Border.Shadow>
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <Image Source="{Binding Artwork.ImageUrl}"
+                                   Aspect="AspectFill"
+                                   HeightRequest="320" />
+
+                            <VerticalStackLayout Padding="18,14,18,16" Spacing="8" BackgroundColor="White">
+
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Artwork.Title}"
+                                           FontFamily="OpenSansSemibold"
+                                           FontSize="20"
+                                           TextColor="{StaticResource TextDark}"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Artwork.Price, StringFormat='${0}'}"
+                                           FontFamily="OpenSansSemibold"
+                                           FontSize="13"
+                                           TextColor="{StaticResource OrangeAccent}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="28" HeightRequest="28"
+                                            StrokeShape="RoundRectangle 14"
+                                            Stroke="{StaticResource OrangeAccent}"
+                                            StrokeThickness="1.5">
+                                        <Image Source="{Binding Artwork.Artist.AvatarUrl}"
+                                               Aspect="AspectFill" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Margin="10,0"
+                                                         VerticalOptions="Center"
+                                                         Spacing="1">
+                                        <Label Text="{Binding Artwork.Artist.DisplayName}"
+                                               FontFamily="OpenSansSemibold"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextDark}" />
+                                        <Label Text="{Binding Artwork.Artist.Handle}"
+                                               FontSize="11"
+                                               TextColor="{StaticResource Gray500}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <Label Text="Tap to flip"
+                                       FontSize="11"
+                                       TextColor="{StaticResource Gray400}"
+                                       HorizontalOptions="Center" />
+
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+
+                <!-- BACK FACE -->
+                <Grid IsVisible="{Binding IsShowingBack}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding FlipCommand}" />
+                    </Grid.GestureRecognizers>
+
+                    <!-- Backing layer: Orange card depth -->
+                    <Border BackgroundColor="{StaticResource OrangeAccent}"
+                            StrokeShape="RoundRectangle 20"
+                            Stroke="Transparent"
+                            Margin="8,10,0,0"
+                            VerticalOptions="Fill">
+                        <BoxView Color="Transparent" />
+                    </Border>
+
+                    <!-- Main Info Card -->
+                    <Border BackgroundColor="White"
+                            StrokeShape="RoundRectangle 20"
+                            Stroke="{StaticResource OrangeAccent}"
+                            StrokeThickness="2"
+                            Margin="0,0,8,10">
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.12" Radius="24" Offset="0,6" />
+                        </Border.Shadow>
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <!-- Artist profile strip -->
+                            <Grid BackgroundColor="{StaticResource OrangeAccent}"
+                                  Padding="16,14"
+                                  ColumnDefinitions="Auto,*,Auto">
+                                <Border Grid.Column="0"
+                                        WidthRequest="40" HeightRequest="40"
+                                        StrokeShape="RoundRectangle 20"
+                                        Stroke="White"
+                                        StrokeThickness="2">
+                                    <Image Source="{Binding Artwork.Artist.AvatarUrl}"
+                                           Aspect="AspectFill" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Margin="10,0,0,0"
+                                                     VerticalOptions="Center"
+                                                     Spacing="2">
+                                    <Label Text="{Binding Artwork.Artist.DisplayName}"
+                                           FontFamily="OpenSansSemibold"
+                                           FontSize="14"
+                                           TextColor="White" />
+                                    <Label Text="{Binding Artwork.Artist.Handle}"
+                                           FontSize="11"
+                                           TextColor="#FFD4A8" />
+                                </VerticalStackLayout>
+                                <Border Grid.Column="2"
+                                        BackgroundColor="White"
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="Transparent"
+                                        Padding="8,4"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding Artwork.Availability}"
+                                           FontFamily="OpenSansSemibold"
+                                           FontSize="10"
+                                           TextColor="{StaticResource OrangeAccent}" />
+                                </Border>
+                            </Grid>
+
+                            <!-- Artwork title -->
+                            <VerticalStackLayout Padding="16,14,16,0" Spacing="2">
+                                <Label Text="ARTWORK"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="9"
+                                       TextColor="{StaticResource Gray400}" />
+                                <Label Text="{Binding Artwork.Title}"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="18"
+                                       TextColor="{StaticResource TextDark}" />
+                            </VerticalStackLayout>
+
+                            <!-- Detail rows -->
+                            <VerticalStackLayout Padding="16,10,16,0" Spacing="0">
+
+                                <Grid ColumnDefinitions="90,*" Padding="0,6">
+                                    <Label Grid.Column="0" Text="PRICE"
+                                           FontFamily="OpenSansSemibold" FontSize="9"
+                                           TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Artwork.Price, StringFormat='${0}'}"
+                                           FontFamily="OpenSansSemibold" FontSize="13"
+                                           TextColor="{StaticResource OrangeAccent}" VerticalOptions="Center" />
+                                </Grid>
+                                <BoxView Color="{StaticResource Gray100}" HeightRequest="1" />
+
+                                <Grid ColumnDefinitions="90,*" Padding="0,6">
+                                    <Label Grid.Column="0" Text="MEDIUM"
+                                           FontFamily="OpenSansSemibold" FontSize="9"
+                                           TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Artwork.Medium}"
+                                           FontSize="12" TextColor="{StaticResource TextDark}"
+                                           VerticalOptions="Center" LineBreakMode="WordWrap" />
+                                </Grid>
+                                <BoxView Color="{StaticResource Gray100}" HeightRequest="1" />
+
+                                <Grid ColumnDefinitions="90,*" Padding="0,6">
+                                    <Label Grid.Column="0" Text="SIZE"
+                                           FontFamily="OpenSansSemibold" FontSize="9"
+                                           TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Artwork.Size}"
+                                           FontSize="12" TextColor="{StaticResource TextDark}"
+                                           VerticalOptions="Center" LineBreakMode="WordWrap" />
+                                </Grid>
+                                <BoxView Color="{StaticResource Gray100}" HeightRequest="1" />
+
+                                <Grid ColumnDefinitions="90,*" Padding="0,6">
+                                    <Label Grid.Column="0" Text="EDITION"
+                                           FontFamily="OpenSansSemibold" FontSize="9"
+                                           TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Artwork.Edition}"
+                                           FontSize="12" TextColor="{StaticResource TextDark}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                                <BoxView Color="{StaticResource Gray100}" HeightRequest="1" />
+
+                                <Grid ColumnDefinitions="90,*" Padding="0,6">
+                                    <Label Grid.Column="0" Text="SHIPS FROM"
+                                           FontFamily="OpenSansSemibold" FontSize="9"
+                                           TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Artwork.ShipsFrom}"
+                                           FontSize="12" TextColor="{StaticResource TextDark}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                                <BoxView Color="{StaticResource Gray100}" HeightRequest="1" />
+
+                                <Grid ColumnDefinitions="90,*" Padding="0,6">
+                                    <Label Grid.Column="0" Text="PROOF"
+                                           FontFamily="OpenSansSemibold" FontSize="9"
+                                           TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="Verified creator upload"
+                                           FontSize="12" TextColor="{StaticResource TextDark}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+
+                            </VerticalStackLayout>
+
+                            <!-- Artist's Note -->
+                            <VerticalStackLayout Padding="16,14,16,0" Spacing="4">
+                                <Label Text="ARTIST'S NOTE"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="9"
+                                       TextColor="{StaticResource Gray400}" />
+                                <Label Text="{Binding Artwork.Description}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource Gray600}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <!-- Hashtags -->
+                            <Label Text="#artdeq  #artwork  #collector"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray400}"
+                                   Margin="16,10,16,0" />
+
+                            <!-- Flip back hint -->
+                            <Label Text="← Tap to flip back"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray400}"
+                                   HorizontalOptions="Center"
+                                   Margin="0,14,0,16" />
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+
+                <!-- ACTIONS -->
+                <Border BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="{StaticResource Gray100}"
+                        StrokeThickness="1"
+                        Padding="0,10">
+                    <Grid ColumnDefinitions="*,*,*,*">
+
+                        <Border Grid.Column="0"
+                                WidthRequest="54" HeightRequest="54"
+                                BackgroundColor="Transparent"
+                                Stroke="Transparent"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Path Data="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                      Stroke="{StaticResource Gray500}"
+                                      StrokeThickness="1.5"
+                                      Fill="Transparent"
+                                      WidthRequest="22"
+                                      HeightRequest="22"
+                                      Aspect="Uniform"
+                                      HorizontalOptions="Center" />
+                                <Label Text="Like" FontSize="11"
+                                       TextColor="{StaticResource Gray500}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                WidthRequest="54" HeightRequest="54"
+                                BackgroundColor="Transparent"
+                                Stroke="Transparent"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChatCommand}" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Path Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                                      Stroke="{StaticResource Gray500}"
+                                      StrokeThickness="1.5"
+                                      Fill="Transparent"
+                                      WidthRequest="22" HeightRequest="22"
+                                      Aspect="Uniform" HorizontalOptions="Center" />
+                                <Label Text="Message" FontSize="11"
+                                       TextColor="{StaticResource Gray500}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2"
+                                WidthRequest="54" HeightRequest="54"
+                                BackgroundColor="Transparent"
+                                Stroke="Transparent"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SaveCommand}" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Path IsVisible="{Binding IsNotSaved}"
+                                      Data="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+                                      Stroke="{StaticResource Gray500}"
+                                      StrokeThickness="1.5"
+                                      Fill="Transparent"
+                                      WidthRequest="22" HeightRequest="22"
+                                      Aspect="Uniform" HorizontalOptions="Center" />
+                                <Path IsVisible="{Binding IsSaved}"
+                                      Data="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+                                      Stroke="{StaticResource OrangeAccent}"
+                                      StrokeThickness="1.5"
+                                      Fill="{StaticResource OrangeAccent}"
+                                      WidthRequest="22" HeightRequest="22"
+                                      Aspect="Uniform" HorizontalOptions="Center" />
+                                <Label IsVisible="{Binding IsNotSaved}"
+                                       Text="Save" FontSize="11"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="{StaticResource Gray500}"
+                                       HorizontalOptions="Center" />
+                                <Label IsVisible="{Binding IsSaved}"
+                                       Text="Saved" FontSize="11"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="{StaticResource OrangeAccent}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="3"
+                                WidthRequest="54" HeightRequest="54"
+                                BackgroundColor="{StaticResource OrangeAccent}"
+                                StrokeShape="RoundRectangle 14"
+                                Stroke="Transparent"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CollectCommand}" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="Center">
+                                <Path Data="M2,12 L9,4 H21 V20 H9 Z M9.4,8 A1.4,1.4 0 1,1 6.6,8 A1.4,1.4 0 1,1 9.4,8 Z"
+                                      Stroke="White"
+                                      StrokeThickness="1.6"
+                                      Fill="Transparent"
+                                      WidthRequest="16" HeightRequest="16"
+                                      Aspect="Uniform" HorizontalOptions="Center" />
+                                <Label Text="Buy" FontSize="12"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </Grid>
+                </Border>
+
+                <Label Text="{Binding ConfirmationMessage}"
+                       IsVisible="{Binding SaveConfirmationVisible}"
+                       FontSize="12"
+                       TextColor="{StaticResource OrangeAccent}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

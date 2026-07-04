@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ArtDeq.Models"
+             xmlns:vm="clr-namespace:ArtDeq.ViewModels"
+             x:Class="ArtDeq.Views.FeedPage"
+             x:DataType="vm:FeedViewModel"
+             BackgroundColor="{StaticResource Cream}"
+             Shell.TabBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!--  HEADER  -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto,*,Auto,Auto,Auto"
+              Padding="16,14,14,10"
+              BackgroundColor="White">
+
+            <Label Grid.Column="0"
+                   Text="ArtDeq"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="22"
+                   TextColor="{StaticResource OrangeAccent}"
+                   VerticalOptions="Center" />
+
+            <!-- Search -->
+            <Label Grid.Column="2"
+                   Text="Search"
+                   FontSize="12"
+                   TextColor="{StaticResource Gray600}"
+                   VerticalOptions="Center"
+                   Margin="0,0,18,0" />
+
+            <!-- Notification bell -->
+            <Label Grid.Column="3"
+                   Text="Alerts"
+                   FontSize="12"
+                   TextColor="{StaticResource Gray600}"
+                   VerticalOptions="Center"
+                   Margin="0,0,12,0" />
+
+            <!-- Avatar: tappable — routes to auth or profile -->
+            <Border Grid.Column="4"
+                    WidthRequest="34" HeightRequest="34"
+                    StrokeShape="RoundRectangle 17"
+                    Stroke="{StaticResource OrangeAccent}"
+                    StrokeThickness="2"
+                    VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="AD"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="13"
+                       TextColor="{StaticResource OrangeAccent}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+        </Grid>
+
+        <!--  FILTER TABS  -->
+        <ScrollView Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalScrollBarVisibility="Never"
+                    BackgroundColor="White"
+                    Padding="14,2,14,12">
+            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+
+                <!-- Active: solid orange pill -->
+                <Border BackgroundColor="{StaticResource OrangeAccent}"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="14,6">
+                    <Label Text="For You"
+                           TextColor="White"
+                           FontSize="13"
+                           FontFamily="OpenSansSemibold" />
+                </Border>
+
+                <!-- Inactive: warm cream pill -->
+                <Border BackgroundColor="#EDE8DF"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="14,6">
+                    <Label Text="Following"
+                           TextColor="{StaticResource Gray600}"
+                           FontSize="13" />
+                </Border>
+
+                <Border BackgroundColor="#EDE8DF"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="14,6">
+                    <Label Text="New"
+                           TextColor="{StaticResource Gray600}"
+                           FontSize="13" />
+                </Border>
+
+                <Border BackgroundColor="#EDE8DF"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="14,6">
+                    <Label Text="Popular"
+                           TextColor="{StaticResource Gray600}"
+                           FontSize="13" />
+                </Border>
+
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- STAGGERED CARD GRID  -->
+        <ScrollView Grid.Row="2" BackgroundColor="{StaticResource Cream}">
+            <Grid ColumnDefinitions="*,*"
+                  Padding="12,10,12,16"
+                  ColumnSpacing="10">
+
+                <!-- Left column -->
+                <VerticalStackLayout Grid.Column="0"
+                                     Spacing="14"
+                                     BindableLayout.ItemsSource="{Binding LeftArtworks}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Artwork">
+                            <VerticalStackLayout Spacing="7">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCardTapped"
+                                                          CommandParameter="{Binding .}" />
+                                </VerticalStackLayout.GestureRecognizers>
+
+                                <!-- Image + NEW badge overlay -->
+                                <Grid HeightRequest="195">
+                                    <Border StrokeShape="RoundRectangle 14"
+                                            Stroke="Transparent">
+                                        <Image Source="{Binding ImageUrl}"
+                                               Aspect="AspectFill" />
+                                    </Border>
+                                    <!-- NEW badge -->
+                                    <Border IsVisible="{Binding IsNew}"
+                                            BackgroundColor="{StaticResource OrangeAccent}"
+                                            StrokeShape="RoundRectangle 8"
+                                            Stroke="Transparent"
+                                            Padding="7,3"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Start"
+                                            Margin="9,9,0,0">
+                                        <Label Text="NEW"
+                                               TextColor="White"
+                                               FontSize="10"
+                                               FontFamily="OpenSansSemibold" />
+                                    </Border>
+                                </Grid>
+
+                                <!-- Artist row -->
+                                <Grid ColumnDefinitions="Auto,*,Auto" Padding="2,0">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="20" HeightRequest="20"
+                                            StrokeShape="RoundRectangle 10"
+                                            Stroke="Transparent"
+                                            BackgroundColor="{StaticResource Gray100}"
+                                            VerticalOptions="Center">
+                                        <Image Source="{Binding Artist.AvatarUrl}"
+                                               Aspect="AspectFill" />
+                                    </Border>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Artist.Handle}"
+                                           FontSize="11"
+                                           TextColor="{StaticResource Gray500}"
+                                           VerticalOptions="Center"
+                                           Margin="6,0,0,0"
+                                           LineBreakMode="TailTruncation" />
+                                    <HorizontalStackLayout Grid.Column="2"
+                                                           Spacing="3"
+                                                           VerticalOptions="Center">
+                                        <Label Text="♥"
+                                               FontSize="11"
+                                               TextColor="{StaticResource OrangeAccent}" />
+                                        <Label Text="{Binding LikeCount}"
+                                               FontSize="11"
+                                               TextColor="{StaticResource Gray400}" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <!-- Right column — 38px top offset for stagger -->
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="14"
+                                     Margin="0,38,0,0"
+                                     BindableLayout.ItemsSource="{Binding RightArtworks}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Artwork">
+                            <VerticalStackLayout Spacing="7">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCardTapped"
+                                                          CommandParameter="{Binding .}" />
+                                </VerticalStackLayout.GestureRecognizers>
+
+                                <Grid HeightRequest="158">
+                                    <Border StrokeShape="RoundRectangle 14"
+                                            Stroke="Transparent">
+                                        <Image Source="{Binding ImageUrl}"
+                                               Aspect="AspectFill" />
+                                    </Border>
+                                    <Border IsVisible="{Binding IsNew}"
+                                            BackgroundColor="{StaticResource OrangeAccent}"
+                                            StrokeShape="RoundRectangle 8"
+                                            Stroke="Transparent"
+                                            Padding="7,3"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Start"
+                                            Margin="9,9,0,0">
+                                        <Label Text="NEW"
+                                               TextColor="White"
+                                               FontSize="10"
+                                               FontFamily="OpenSansSemibold" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" Padding="2,0">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="20" HeightRequest="20"
+                                            StrokeShape="RoundRectangle 10"
+                                            Stroke="Transparent"
+                                            BackgroundColor="{StaticResource Gray100}"
+                                            VerticalOptions="Center">
+                                        <Image Source="{Binding Artist.AvatarUrl}"
+                                               Aspect="AspectFill" />
+                                    </Border>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Artist.Handle}"
+                                           FontSize="11"
+                                           TextColor="{StaticResource Gray500}"
+                                           VerticalOptions="Center"
+                                           Margin="6,0,0,0"
+                                           LineBreakMode="TailTruncation" />
+                                    <HorizontalStackLayout Grid.Column="2"
+                                                           Spacing="3"
+                                                           VerticalOptions="Center">
+                                        <Label Text="♥"
+                                               FontSize="11"
+                                               TextColor="{StaticResource OrangeAccent}" />
+                                        <Label Text="{Binding LikeCount}"
+                                               FontSize="11"
+                                               TextColor="{StaticResource Gray400}" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+            </Grid>
+        </ScrollView>
+
+        <!-- BOTTOM NAVIGATION -->
+        <Grid Grid.Row="3" RowDefinitions="0.8,Auto" BackgroundColor="White">
+
+            <!-- Separator line -->
+            <BoxView Grid.Row="0"
+                     Color="{StaticResource Gray100}"
+                     HorizontalOptions="Fill" />
+
+            <!-- Nav items -->
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="*,*,Auto,*,*"
+                  Padding="0,8,0,12">
+
+                <!-- Feed (active) -->
+                <VerticalStackLayout Grid.Column="0"
+                                     HorizontalOptions="Center"
+                                     Spacing="3">
+                    <Path Data="M3,3 H10 V10 H3 Z M14,3 H21 V10 H14 Z M3,14 H10 V21 H3 Z M14,14 H21 V21 H14 Z"
+                          Stroke="{StaticResource OrangeAccent}"
+                          StrokeThickness="1.5"
+                          Fill="Transparent"
+                          WidthRequest="20" HeightRequest="20"
+                          Aspect="Uniform" HorizontalOptions="Center" />
+                    <Label Text="Feed"
+                           FontSize="10"
+                           FontFamily="OpenSansSemibold"
+                           TextColor="{StaticResource OrangeAccent}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <!-- Collections -->
+                <VerticalStackLayout Grid.Column="1"
+                                     HorizontalOptions="Center"
+                                     Spacing="3">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCollectionsTapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Path Data="M3,3 H17 V17 H3 Z M7,7 H21 V21 H7 Z"
+                          Stroke="{StaticResource Gray300}"
+                          StrokeThickness="1.5"
+                          Fill="Transparent"
+                          WidthRequest="20" HeightRequest="20"
+                          Aspect="Uniform" HorizontalOptions="Center" />
+                    <Label Text="Collections"
+                           FontSize="10"
+                           TextColor="{StaticResource Gray300}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <!-- + button (orange circle, center) -->
+                <Border Grid.Column="2"
+                        WidthRequest="54"
+                        HeightRequest="54"
+                        StrokeShape="RoundRectangle 27"
+                        BackgroundColor="{StaticResource OrangeAccent}"
+                        Stroke="Transparent"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Margin="14,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPickPhotoTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="+"
+                           FontSize="30"
+                           FontFamily="OpenSansSemibold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="0,-3,0,0" />
+                </Border>
+
+                <!-- Inbox -->
+                <VerticalStackLayout Grid.Column="3"
+                                     HorizontalOptions="Center"
+                                     Spacing="3">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInboxTapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Path Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                          Stroke="{StaticResource Gray300}"
+                          StrokeThickness="1.5"
+                          Fill="Transparent"
+                          WidthRequest="20" HeightRequest="20"
+                          Aspect="Uniform" HorizontalOptions="Center" />
+                    <Label Text="Inbox"
+                           FontSize="10"
+                           TextColor="{StaticResource Gray300}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <!-- Saved -->
+                <VerticalStackLayout Grid.Column="4"
+                                     HorizontalOptions="Center"
+                                     Spacing="3">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSavedTapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Path Data="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+                          Stroke="{StaticResource Gray300}"
+                          StrokeThickness="1.5"
+                          Fill="Transparent"
+                          WidthRequest="20" HeightRequest="20"
+                          Aspect="Uniform" HorizontalOptions="Center" />
+                    <Label Text="Saved"
+                           FontSize="10"
+                           TextColor="{StaticResource Gray300}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+            </Grid>
+        </Grid>
+
+        <!-- Image preview overlay (full-screen, shown after gallery pick) -->
+        <Grid x:Name="PreviewOverlay"
+              Grid.RowSpan="4"
+              IsVisible="False"
+              BackgroundColor="#CC000000">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnClosePreviewTapped" />
+            </Grid.GestureRecognizers>
+            <Border StrokeShape="RoundRectangle 16"
+                    Stroke="Transparent"
+                    BackgroundColor="#1A1A1A"
+                    Margin="24"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Fill">
+                <VerticalStackLayout Spacing="0">
+                    <Image x:Name="PreviewImage"
+                           Aspect="AspectFit"
+                           HeightRequest="360" />
+                    <Label Text="Tap to close"
+                           TextColor="{StaticResource Gray400}"
+                           FontSize="13"
+                           HorizontalOptions="Center"
+                           Margin="0,12,0,16" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

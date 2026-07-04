@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ArtDeq.Views.ProfilePage"
+             BackgroundColor="{StaticResource Cream}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Button Grid.Row="0"
+                Text="‹"
+                Clicked="OnBackClicked"
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource Gray600}"
+                FontSize="28"
+                HorizontalOptions="Start"
+                Padding="16,12" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="18"
+                                 Padding="24,40,24,28">
+
+                <Label Text="My Profile"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="24"
+                       TextColor="{StaticResource OrangeAccent}"
+                       HorizontalOptions="Center" />
+
+                <Border WidthRequest="96"
+                        HeightRequest="96"
+                        StrokeShape="RoundRectangle 48"
+                        BackgroundColor="{StaticResource OrangeAccent}"
+                        Stroke="Transparent"
+                        HorizontalOptions="Center">
+                    <Label Text="AD"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="36"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Label x:Name="DisplayNameLabel"
+                       Text="Display Name"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="20"
+                       TextColor="{StaticResource Gray600}"
+                       HorizontalOptions="Center" />
+
+                <Label x:Name="UsernameLabel"
+                       Text="@username"
+                       FontSize="14"
+                       TextColor="{StaticResource Gray500}"
+                       HorizontalOptions="Center" />
+
+                <Label x:Name="RoleLabel"
+                       Text="Role"
+                       FontSize="13"
+                       TextColor="{StaticResource OrangeAccent}"
+                       HorizontalOptions="Center"
+                       Margin="0,-6,0,8" />
+
+                <Border BackgroundColor="White"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="My Artworks"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="16"
+                               TextColor="{StaticResource Gray600}" />
+                        <Label Text="Uploaded artwork cards will appear here."
+                               FontSize="13"
+                               TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Saved Artworks"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="16"
+                               TextColor="{StaticResource Gray600}" />
+                        <Label Text="Artworks you save from the feed will appear here."
+                               FontSize="13"
+                               TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="My Collection"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="16"
+                               TextColor="{StaticResource Gray600}" />
+                        <Label Text="Your collected art cards will appear here."
+                               FontSize="13"
+                               TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="Log Out"
+                        Clicked="OnLogOutClicked"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource OrangeAccent}"
+                        BorderColor="{StaticResource OrangeAccent}"
+                        BorderWidth="1"
+                        FontFamily="OpenSansSemibold"
+                        FontSize="15"
+                        CornerRadius="14"
+                        HeightRequest="50"
+                        Margin="0,12,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>
